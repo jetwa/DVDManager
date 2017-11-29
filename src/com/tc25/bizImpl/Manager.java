@@ -41,7 +41,11 @@ public class Manager {
 				mv.show(0);
 				break;
 			case 1:
-				userLogin();
+				User temp = null;
+				if (null != (temp = userLogin())) {
+					new userManager(temp).run();
+				}
+				;
 				break;
 			case 2:
 				register();
@@ -52,7 +56,7 @@ public class Manager {
 		}
 	}
 
-	public boolean userLogin() {
+	public User userLogin() {
 		int index = 1;
 		boolean isContinue = true;
 		User nowUser = null;
@@ -79,9 +83,9 @@ public class Manager {
 				pwd = (Input.getInstance()).getString();
 				if (pwd.equals(nowUser.getUserPwd())) {
 					isContinue = false;
-					//登陆成功,重置锁定计数
+					// 登陆成功,重置锁定计数
 					nowUser.setErrorCount(0);
-					return true;
+					return nowUser;
 				} else if (nowUser.getErrorCount() < 5) {
 					ulv.show(4);
 					nowUser.setErrorCount(nowUser.getErrorCount() + 1);
@@ -106,7 +110,7 @@ public class Manager {
 				break;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public void register() {
@@ -117,7 +121,7 @@ public class Manager {
 			case 1:
 				rv.show(1);
 				acc = (Input.getInstance()).getString();
-				p = Pattern.compile("[a-zA-Z0-9_.]{6,16}");
+				p = Pattern.compile("[a-zA-Z]{1}[a-zA-Z0-9_.]{5,15}");
 				m = p.matcher(acc);
 				if ((users.getUsers()).containsKey(acc)) {
 					rv.show(5);
@@ -133,7 +137,7 @@ public class Manager {
 			case 2:
 				rv.show(2);
 				pwd = (Input.getInstance()).getString();
-				p = Pattern.compile("[a-zA-Z0-9_.*]{6,16}");
+				p = Pattern.compile("[a-zA-Z]{1}[a-zA-Z0-9_.*]{5,15}");
 				m = p.matcher(pwd);
 				if ("0".equals(pwd)) {
 					isContinue = false;
